@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "255201089288",
+    "project_id": "helmetshope-500e1",
+    "storage_bucket": "helmetshope-500e1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:255201089288:android:ba59db5157e3e790a27ebd",
+        "android_client_info": {
+          "package_name": "com.example.helmetshope"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB979_iWGZxgEGs61LfTZp1wSAQ2_1YNLY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
