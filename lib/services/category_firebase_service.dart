@@ -61,20 +61,59 @@ class CategoryFirebaseService {
   //   }
   // }
 
-  Future<List<ProductCategory>> getCategories() async {
+  // Future<List<ProductCategory>> getCategories() async {
    
+  //   final event = await categoryRef.once(DatabaseEventType.value);
+  //   final Map<dynamic, dynamic> catmap =
+  //       event.snapshot.value as Map<dynamic, dynamic>;
+  //   //print(catmap);
+  //   catmap.forEach(
+  //     (key, value) {
+  //       final category = ProductCategory(id: value["id"], name: value["name"]);
+  //       categoryList.add(category);
+  //     },
+  //   );
+   
+  //   return categoryList;
+   
+  // }
+  Future<List<ProductCategory>> getCategories() async {
+    categoryList.clear();
+  try {
     final event = await categoryRef.once(DatabaseEventType.value);
+
+    if (event.snapshot.value == null) {
+      // Handle the case where there is no data
+      print("empty list");
+      return [];
+    }
+
     final Map<dynamic, dynamic> catmap =
         event.snapshot.value as Map<dynamic, dynamic>;
-    //print(catmap);
+
+    // List<ProductCategory> categoryList = [];
+
     catmap.forEach(
       (key, value) {
         final category = ProductCategory(id: value["id"], name: value["name"]);
         categoryList.add(category);
       },
     );
-   
+
     return categoryList;
-   
+  } catch (e) {
+    // Handle the error. You can log it, show a user-friendly message, etc.
+    print('Error fetching categories: $e');
+    return []; // Return an empty list or handle it as appropriate for your use case.
   }
+}
+// void mapconvert(){
+//   Map<dynamic, dynamic> catmap =
+//                     snapshot.data!.snapshot.value as dynamic;
+
+//                 List<ProductCategory> catList = catmap.values
+//                     .map((e) => ProductCategory.fromMap(e))
+//                     .toList();
+// }
+
 }

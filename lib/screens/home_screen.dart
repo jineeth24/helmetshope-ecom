@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.w300),
               ),
               kheight15,
-              ProductListView(),
+              ProductListView(),//recommended product view
               kheight15,
               const Text(
                 "Popular",

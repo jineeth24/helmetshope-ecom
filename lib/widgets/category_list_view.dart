@@ -6,6 +6,7 @@ import 'category_list_item.dart';
 class CategoryListView extends StatelessWidget {
   List<String> categoryList = ["Helmets", "Jackets", "Gloves", "Boots"];
   //get the catlist
+  //
 
   @override
   Widget build(BuildContext context) {

@@ -13,7 +13,7 @@ class CategoryListItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CatelogueScreen(categoryName: categoryName,))),
+     // onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CatelogueScreen(categoryName: categoryName,))),
       child: Container(
         height: 80,
         width: 100,

@@ -4,12 +4,16 @@ import 'package:flutter/material.dart';
 import '../screens/product_screen.dart';
 
 class ProductCard extends StatelessWidget {
+  var index;
+ // final String? productId;
   final String productName;
-  ProductCard({required this.productName});
+  final String price;
+  final String images;
+  ProductCard({this.index, required this.productName,required this.price,required this.images});
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProductScreen())),
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProductScreen(index: index,))),
       child: Container(
         // height: 200,
         // width: 180,
@@ -26,7 +30,7 @@ class ProductCard extends StatelessWidget {
               height: 150,
               width: MediaQuery.of(context).size.width / 2.5,
               child: Image.network(
-                productName,
+                images,
                 fit: BoxFit.cover,
               ),
             ),
@@ -36,10 +40,10 @@ class ProductCard extends StatelessWidget {
               child: Container(
                 //color: Colors.amber,
                 margin:const EdgeInsets.all(5),
-                child:const Column(
+                child:   Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [Text("helmets name"), Text("\$price")],
+                  children: [Text(productName), Text(price)],
                 ),
               ),
             ),

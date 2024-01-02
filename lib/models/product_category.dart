@@ -9,7 +9,7 @@
       'name': name,
     };
   }
-   factory ProductCategory.fromMap(String id, Map<String, dynamic> data) {
+   factory ProductCategory.fromMap( Map<dynamic, dynamic> data) {
     return ProductCategory(
       id: data['id'],
       name: data['name'],

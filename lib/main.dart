@@ -5,6 +5,8 @@ import 'package:helmetshope/providers/admin_category_provider.dart';
 import 'package:helmetshope/providers/category_dropdown_provider.dart';
 import 'package:helmetshope/providers/product_provider.dart';
 import 'package:helmetshope/screens/admin_home_screen.dart';
+import 'package:helmetshope/screens/home_screen.dart';
+import 'package:helmetshope/screens/product_screen.dart';
 import 'package:helmetshope/screens/signup_screen.dart';
 import 'package:helmetshope/services/auth_service.dart';
 import 'package:provider/provider.dart';
@@ -30,13 +32,20 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => AdminCategoryProvider(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => CategoryDropdownProvider(),
+        // ChangeNotifierProvider(
+        //   create: (context) => CategoryDropdownProvider(),//provide categorylist
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (context) => ProductProvider(),
+        // ),
+        ListenableProxyProvider<AdminCategoryProvider, ProductProvider>(
+          update: (context, categoryProvider, productProvider) {
+            productProvider ??= ProductProvider();
+            // productProvider.fetchProductsFromDatabase(); // Fetch products
+            productProvider.setCategories(categoryProvider.categoryList);
+            return productProvider;
+          },
         ),
-        ChangeNotifierProvider(
-          create: (context) => ProductProvider(),
-        ),
-        
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -44,7 +53,9 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: AdminHomeScreen(),
+       //home: AdminHomeScreen(),
+      home:HomeScreen()
+    //home: ProductScreen(),
       ),
     );
   }

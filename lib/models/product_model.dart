@@ -1,4 +1,5 @@
 import 'package:image_picker/image_picker.dart';
+// List<String> images ;
 class Product {
   final String? productId;
   final String productName;
@@ -7,7 +8,6 @@ class Product {
   final double purchasePrice;
   final double retailPrice;
   final int stock;
- // List<String> images ;
  String? images;
 
   Product({
@@ -20,6 +20,19 @@ class Product {
     required this.stock,
      this.images,
   });
+  
+    factory Product.fromMap(Map<dynamic, dynamic> map) {
+    return Product(
+      productId: map['productId'],
+      productName: map['productName'],
+      categoryId: map['categoryId'],
+      description: map['description'],
+      purchasePrice: map['purchasePrice'].toDouble(),
+      retailPrice: map['retailPrice'].toDouble(),
+      stock: map['stock'],
+      images: map['images'],
+    );
+  }
 
   // Add a list to store picked image URIs
   // Method to pick images from the gallery

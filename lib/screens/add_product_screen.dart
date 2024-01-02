@@ -1,16 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:helmetshope/core/constants.dart';
+import 'package:helmetshope/models/product_category.dart';
+import 'package:helmetshope/providers/admin_category_provider.dart';
 import 'package:helmetshope/providers/category_dropdown_provider.dart';
 import 'package:helmetshope/providers/product_provider.dart';
+import 'package:helmetshope/screens/admin_product_home_screen.dart';
 import 'package:helmetshope/widgets/custom_textform_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../models/product_model.dart';
+import '../providers/admin_category_provider.dart';
 import '../widgets/custom_appbar_widget.dart';
 
-List<String> categoryList = ["helmets", "jackets", "gloves", "pads"];
+//List<String> categoryList = ["helmets", "jackets", "gloves", "pads"];
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -25,12 +29,17 @@ class _AddProdctScreenState extends State<AddProductScreen> {
   final TextEditingController purchasePriceController = TextEditingController();
   final TextEditingController retailPriceController = TextEditingController();
   final TextEditingController stockController = TextEditingController();
-  //String dropDownValue = categoryList[0];
 
   @override
   Widget build(BuildContext context) {
-    final categoryProvider = Provider.of<CategoryDropdownProvider>(context);
+    final adminCategoryProvider = Provider.of<AdminCategoryProvider>(context);
+    // final categorydropdownProvider =
+    //     Provider.of<CategoryDropdownProvider>(context);
     final productProvider = Provider.of<ProductProvider>(context);
+    final categoryList = adminCategoryProvider.categoryList;
+
+   
+
     return Scaffold(
       appBar: AppBar(
         title: Text("AddProduct"),
@@ -65,7 +74,18 @@ class _AddProdctScreenState extends State<AddProductScreen> {
                 CustomTextFormWidget(
                     formController: stockController, hintText: "Stock"),
                 kheight5,
-                CategoryDropdown(),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 5), // Set the desired horizontal padding
+                  child: Container(
+                    width: MediaQuery.of(context)
+                        .size
+                        .width, // Set the desired width
+                    child: CategoryDropdown(categoryList),
+                  ),
+                ),
+
+                //give catlist as arguments
                 ElevatedButton(
                   onPressed: () async {
                     //_pickImage();
@@ -85,7 +105,7 @@ class _AddProdctScreenState extends State<AddProductScreen> {
                       for (var imagePath in productProvider.images)
                         Text(
                           imagePath,
-                          style:const TextStyle(
+                          style: const TextStyle(
                               color: Color.fromARGB(255, 214, 45, 33)),
                         ),
                     ],
@@ -93,18 +113,21 @@ class _AddProdctScreenState extends State<AddProductScreen> {
                 TextButton(
                     onPressed: () {
                       productProvider.uploadToStorage();
+                      // final productUrl = productProvider.newUrl;
                       Product newProduct = Product(
-                          productName: productNameController.text,
-                          categoryId: categoryProvider.dropDownValue.toString(),
-                          description: descriptionController.text.toString(),
-                          purchasePrice:
-                              double.parse(purchasePriceController.text),
-                          retailPrice: double.parse(retailPriceController.text),
-                          stock: int.parse(stockController.text),
-                          );
+                        productName: productNameController.text,
+                        categoryId: adminCategoryProvider.selectedCategoryId!.id
+                            .toString(),
+                        //give the categoryid,not name
+                        description: descriptionController.text.toString(),
+                        purchasePrice: double.parse(purchasePriceController.text),
+                        retailPrice: double.parse(retailPriceController.text),
+                        stock: int.parse(stockController.text),
+                      );
+                      
 
-                      // print(newProduct.categoryId);
                       productProvider.addProduct(newProduct);
+                      Navigator.of(context).pop();
                     },
                     child: Text("Save")),
               ],
@@ -115,47 +138,25 @@ class _AddProdctScreenState extends State<AddProductScreen> {
     );
   }
 
-  // Widget CategoryDropdown() {
-  //   final dropdownvalueProvider =
-  //       Provider.of<CategoryDropdownProvider>(context);
-  //   return DropdownButton(
-  //       hint: Text("Select Category"),
-  //       value: dropdownvalueProvider.dropDownValue,
-  //       items: categoryList.map<DropdownMenuItem<String>>((String category) {
-  //         return DropdownMenuItem(value: category, child: Text(category));
-  //       }).toList(),
-  //       onChanged: (String? value) {
-  //         //user provider method to set value
-  //         dropdownvalueProvider.setDropDownvalue(value!);
-  //       });
-  // }
-}
+  Widget CategoryDropdown(List<ProductCategory> categories) {
+    return Consumer<AdminCategoryProvider>(
+      builder: (context, adminCategoryProvider, child) {
+        var selectedItemId = adminCategoryProvider.selectedCategoryId;
 
-class CategoryDropdown extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      // height: 0,
-      child: Consumer<CategoryDropdownProvider>(
-        builder: (context, dropdownvalueProvider, child) {
-          return DropdownButtonFormField(
-            // isExpanded: true,
-            // hint: Text("Select Category"),
-            decoration: InputDecoration(
-              hintText: "Category",
-              labelText: " Select catgory",
-            ),
-            value: dropdownvalueProvider.dropDownValue,
-            items: dropdownvalueProvider.categoryList
-                .map<DropdownMenuItem<String>>((String category) {
-              return DropdownMenuItem(value: category, child: Text(category));
-            }).toList(),
-            onChanged: (String? value) {
-              dropdownvalueProvider.setDropDownValue(value!);
-            },
-          );
-        },
-      ),
+        return DropdownButton(
+          value: selectedItemId,
+          items: categories.map((ProductCategory category) {
+            return DropdownMenuItem(
+              value: category,
+              child: Text(category.name),
+            );
+          }).toList(),
+          onChanged: (value) {
+            adminCategoryProvider.setSelectedCategory(value!);
+          
+          },
+        );
+      },
     );
   }
 }
